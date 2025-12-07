@@ -1,0 +1,444 @@
+/* ============================================================
+   ARQUIVO CSS COMPLETO E DEFINITIVO (css/style.css)
+   ============================================================ */
+
+/* 1. RESET E ESTILOS GERAIS */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 20px;
+    background-color: #00000014;
+    color: #333;
+}
+
+h1, h2 {
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+
+a { color: #007bff; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ========================================= */
+/* 2. BRANDING (Logo e Títulos) */
+/* ========================================= */
+.main-title-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.main-logo {
+    height: 55px;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.main-title-container h1 {
+    margin: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+    font-size: 2.2em;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    color: #888;
+    font-size: 0.9em;
+}
+
+footer .footer-rights {
+    font-weight: 800;
+    letter-spacing: .2px;
+    text-transform: uppercase;
+    color: #000;
+    font-size: 1.05em;
+}
+
+/* ========================================= */
+/* 3. MENSAGENS E ALERTAS */
+/* ========================================= */
+.flash-message { padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; }
+.flash-message.success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+.flash-message.error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+.flash-message.warning { color: #856404; background-color: #fff3cd; border-color: #ffeeba; }
+
+/* Toasts (Notificações Flutuantes) */
+#toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.toast { display: flex; align-items: center; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); color: #fff; font-size: 15px; opacity: 0; transform: translateX(100%); transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1); min-width: 250px; max-width: 350px; }
+.toast.show { opacity: 1; transform: translateX(0); }
+.toast.success { background-color: #28a745; }
+.toast.error { background-color: #dc3545; }
+.toast.info { background-color: #17a2b8; }
+.toast-icon { font-size: 22px; margin-right: 12px; }
+
+/* ========================================= */
+/* 4. FORMULÁRIOS E BOTÕES */
+/* ========================================= */
+form { background-color: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
+input[type="text"], input[type="date"], input[type="number"], select, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 0.95em; }
+textarea { min-height: 80px; resize: vertical; }
+small { font-size: 0.8em; color: #6c757d; display: block; margin-top: -10px; margin-bottom: 10px; }
+
+button, input[type="submit"], .button-link {
+    background-color: #007bff; color: white !important; padding: 10px 15px; border: none;
+    border-radius: 4px; cursor: pointer; font-size: 1em; text-decoration: none; display: inline-block;
+    vertical-align: middle; transition: background-color 0.2s ease;
+}
+button:hover, input[type="submit"]:hover, .button-link:hover { background-color: #0056b3; text-decoration: none; }
+button:disabled { background-color: #cccccc; cursor: not-allowed; opacity: 0.7; }
+
+.btn-danger { background-color: #dc3545; } .btn-danger:hover { background-color: #c82333; }
+.btn-secondary { background-color: #6c757d; } .btn-secondary:hover { background-color: #5a6268; }
+
+.form-section { margin-bottom: 25px; padding: 20px; border: 1px solid #e9ecef; border-radius: 5px; background-color: #fdfdfd; }
+.form-section h3 { margin-top: 0; margin-bottom: 20px; font-size: 1.15em; color: #495057; border-bottom: 1px solid #dee2e6; padding-bottom: 10px; }
+
+#fixo-fields { display: none; padding-left: 20px; border-left: 3px solid #007bff; margin-top: 15px; margin-bottom: 15px; background-color: #f8f9fa; padding-top: 10px; padding-bottom: 1px; border-radius: 0 4px 4px 0; }
+#fixo-fields p { margin-top: 0; font-weight: bold; color: #333;}
+.visible { display: block !important; }
+
+/* ========================================= */
+/* 5. TABELAS (Geral e Exportação) */
+/* ========================================= */
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+th { background-color: #e9ecef; color: #495057; }
+.bombeiro-inativo td { color: #aaa; text-decoration: line-through; }
+
+/* Tabela de Exportação */
+.export-table { font-size: 0.85em; }
+.export-table th, .export-table td { padding: 4px; text-align: center; min-width: 35px; white-space: nowrap; }
+.export-table th.bombeiro-nome-col { text-align: left; min-width: 150px; position: sticky; left: 0; background-color: #e9ecef; z-index: 10; }
+.export-table td.bombeiro-nome-cell { text-align: left; font-weight: normal; position: sticky; left: 0; z-index: 5; }
+.export-table tr.fixo-row td.bombeiro-nome-cell { font-weight: bold; }
+.export-table td.fixo-ciclo { background-color: #cce5ff; font-weight: bold; color: #004085; }
+.export-table td.turno-D { background-color: #d1f7c4; color: #146c43; }
+.export-table td.turno-N { background-color: #d6d8db; color: #383d41; }
+.export-table td.turno-I { background-color: #d1ecf1; color: #0c5460; }
+.export-table tbody tr { background-color: #fff; }
+.export-table tbody tr:nth-child(odd) { background-color: #fff3cd; }
+.export-table tbody tr td.bombeiro-nome-cell { background-color: inherit; }
+.export-table tbody tr:hover { background-color: #e9ecef; }
+.export-table tbody tr:hover td.bombeiro-nome-cell { background-color: inherit; }
+
+/* ========================================= */
+/* 6. CONTROLES E SELEÇÃO DE ORDEM */
+/* ========================================= */
+.controles-escala { background: #fff; padding: 15px 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.controles-escala div { margin-bottom: 10px; }
+.controles-escala p { margin: 0 0 8px 0; font-size: 1em; }
+.controles-escala strong { color: #0056b3; }
+
+/* REGRAS PARA OCULTAR SINCRONIZAÇÃO (Se necessário) */
+a[href*="sincronizar"],
+input[value*="Sincronizar"],
+button[name*="sincronizar"] { 
+    display: none !important; 
+}
+
+/* === NOVA BARRA DE BOTÕES === */
+.barra-botoes {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;           
+    margin-bottom: 20px; 
+}
+
+.barra-botoes .botao-azul {
+    background-color: #007bff;
+    color: #fff !important;
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.barra-botoes .botao-azul:hover {
+    background-color: #0056b3;
+}
+
+/* Bloco "Começou no mês de..." */
+.inicio-ordem-wrapper {
+  background: #fff;
+  padding: 12px 18px;
+  margin-bottom: 18px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Alinhado à esquerda */
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.inicio-ordem-wrapper label { margin: 0; font-weight: 600; white-space: nowrap; }
+.inicio-ordem-select { flex: 0 0 auto; width: auto; min-width: 300px; padding: 8px 10px; font-size: 0.95rem; margin-bottom: 0; }
+.inicio-ordem-wrapper #btnAvancarOrdem { margin-left: 0; font-size: 0.9rem; padding: 8px 14px; }
+.mes-anterior-destaque { color: #d97706; font-weight: 700; }
+
+/* === NOVO: CARD "PRÓXIMO BC" (CASINHA) === */
+.proximo-bc-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: 16px;
+}
+
+/* ============================= */
+/* Melhor contraste no modo claro */
+/* ============================= */
+
+body.light-mode .proximo-bc-card {
+    background: #ffffff;
+    border: 1px solid #dcdcdc;
+}
+
+body.light-mode .proximo-bc-card .label {
+    color: #555555 !important; /* CINZA MÉDIO — excelente leitura */
+}
+
+body.light-mode .proximo-bc-card .nome {
+    color: #000000 !important; /* Nome sempre forte no modo claro */
+}
+
+
+/* ============================= */
+/* Modo escuro mantém como está  */
+/* ============================= */
+
+body.dark-mode .proximo-bc-card {
+    background: #1e2633;
+    border: 1px solid #2e3a4a;
+}
+
+body.dark-mode .proximo-bc-card .label {
+    color: #94a3b8 !important; /* CINZA SUAVE, ótimo no escuro */
+}
+
+body.dark-mode .proximo-bc-card .nome {
+    color: #ffffff !important;
+}
+
+
+.proximo-bc-card .label {
+    font-size: 0.85rem;
+    margin-right: 6px;
+    color: #c0c6d4; /* Cinza claro */
+}
+
+.proximo-bc-card .nome {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.proximo-bc-btn {
+    font-size: 0.8rem;
+}
+
+/* ========================================= */
+/* 7. CALENDÁRIO */
+/* ========================================= */
+.calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.calendar-nav h2 { margin: 0; border: none; color: #495057; }
+
+.calendar { table-layout: fixed; }
+.calendar th { text-align: center; background-color: #6c757d; color: white; font-size: 0.9em; font-weight: 600; padding: 10px 5px; }
+.calendar td { height: 180px; vertical-align: top; position: relative; padding: 4px; font-size: 0.9em; background-color: #fff; border: 1px solid #eee; }
+.calendar td.weekend { background-color: #f8f9fa; }
+.calendar td.other-month { background-color: #e9ecef; color: #aaa; }
+.calendar td:hover { background-color: #fcfcfc; }
+
+.day-number { position: absolute; top: 5px; right: 7px; font-size: 1.1em; color: #555; font-weight: bold; z-index: 5; }
+.cell-icons-top { position: absolute; top: 4px; left: 4px; display: flex; align-items: center; gap: 6px; }
+
+.btn-detalhes { cursor: pointer; font-size: 1.2em; color: #007bff; background: none; border: none; padding: 0; line-height: 1; }
+.btn-detalhes:hover { color: #0056b3; transform: scale(1.1); }
+
+/* Ícones de Status e Turno */
+.status-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.1); }
+.status-dot.green { background-color: #28a745; }
+.status-dot.red { background-color: #dc3545; }
+.status-dot.orange { background-color: #ffc107; }
+
+.turno-icon { display: inline-block; margin-left: 5px; }
+.turno-icon.turno-N { color: #4c1d95; }
+.calendar .plantoes-do-dia .turno-icon { font-size: 1.6em; vertical-align: -0.3em; }
+
+/* Lista de Plantões na Célula */
+.plantoes-do-dia { margin-top: 28px; font-size: 0.88em; line-height: 1.7; max-height: 120px; overflow-y: auto; padding-right: 5px; margin-bottom: 5px; }
+.plantao-item { display: block; margin-bottom: 4px; padding: 1px 3px; border-radius: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.plantao-item.fixo { font-weight: bold; background-color: #e2e3e5; color: #333; }
+
+/* Estilização do "X" Marcado */
+.calendar td.marked-x { position: relative; overflow: hidden; }
+.calendar td.marked-x::after { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, 0.25); z-index: 4; pointer-events: none; }
+.calendar td.marked-x::before {
+  content: "✕";
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: Arial, Helvetica, sans-serif; font-size: 130px; font-weight: 700;
+  color: rgba(239, 68, 68, 0.85); text-shadow: 0 3px 6px rgba(0, 0, 0, 0.25), 0 0 18px rgba(239, 68, 68, 0.4);
+  transform: scaleX(0.9) scaleY(0.8); z-index: 6; pointer-events: none;
+}
+.calendar td.marked-x .plantoes-do-dia, .calendar td.marked-x .cell-icons-top { opacity: 0.25; filter: blur(1px); }
+
+/* Slots de Disponibilidade */
+.availability-slot { display: inline-block; font-size: 1.1em; font-weight: bold; margin-right: 4px; padding: 1px 5px; border-radius: 4px; line-height: 1; vertical-align: middle; }
+.availability-slot.disponivel { color: #1d7b41; background-color: #e0f3e6; }
+.availability-slot.lotado { color: #842029; background-color: #fce6e8; opacity: 0.7; }
+.availability-slot.availability-I.disponivel { color: #087990; background-color: #cff4fc; }
+
+/* Botões de Exceção de Fixo */
+.btn-add-excecao-fixo, .btn-restore-fixo { background: none; border: none; font-size: 1.1em; padding: 0 5px; margin-left: 10px; cursor: pointer; vertical-align: middle; line-height: 1; transition: color 0.2s ease, transform 0.1s ease; }
+.btn-add-excecao-fixo { color: #dc3545; } .btn-restore-fixo { color: #198754; }
+.btn-add-excecao-fixo:hover { color: #bb2d3b; transform: scale(1.1); }
+.btn-restore-fixo:hover { color: #157347; transform: scale(1.1); }
+button:disabled.btn-add-excecao-fixo, button:disabled.btn-restore-fixo { color: #ccc; cursor: not-allowed; }
+
+/* ========================================= */
+/* 8. MODAIS (Detalhes e Confirmação) */
+/* ========================================= */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    align-items: center; /* Centraliza Verticalmente */
+    justify-content: center; /* Centraliza Horizontalmente */
+}
+
+/* Força Flexbox quando o modal está visível para garantir centralização */
+div.modal[style*="display: block"],
+div.modal[style*="display:block"] {
+    display: flex !important;
+}
+
+/* Modal Content Padrão - Centralizado */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    color: #333;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 550px;
+    max-height: 90vh; 
+    overflow-y: auto;
+    margin: 0; /* Remove margem para funcionar com flex */
+}
+
+/* Modal Compacto (Opcional via JS) */
+.modal.compact .modal-content { max-width: 620px; width: 92vw; padding: 20px 24px; }
+.modal.compact .modal-topline { display:flex; align-items:center; justify-content:space-between; margin: 6px 0 8px; }
+.modal.compact .modal-topline h3 { margin:0; font-size:1.05rem; border:0; padding:0; }
+.modal.compact #modalOcupantesList li { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee; }
+
+/* Elementos do Modal */
+.modal-content h3 { margin-top: 0; margin-bottom: 15px; color: #3498db; font-size: 1.1em; border-top: 1px solid #ccc; padding-top: 20px; }
+.close-button { position: absolute; top: 10px; right: 20px; color: #aaa; font-size: 28px; font-weight: bold; transition: color 0.2s; cursor: pointer; }
+.close-button:hover { color: #e74c3c; }
+
+#modalOcupantesList { list-style: none; padding: 0; margin-bottom: 20px; }
+#modalOcupantesList li { display: flex; justify-content: space-between; align-items: center; padding: 10px 5px; border-bottom: 1px solid #eee; }
+#modalOcupantesList .bombeiro-tipo { font-size: 0.85em; color: #666; margin-left: 5px; }
+#modalOcupantesList li.tem-excecao .bombeiro-info { text-decoration: line-through; color: #888; font-style: italic; }
+
+.btn-remover-plantao { background-color: #dc3545; color: white; border: none; padding: 2px 6px; font-size: 0.8em; cursor: pointer; border-radius: 3px; margin-left: 15px; }
+.btn-remover-plantao:hover { background-color: #c82333; }
+
+/* Botões de Seleção de Turno */
+.modal-buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 15px; }
+.modal-buttons button { flex-grow: 1; padding: 12px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; transition: all 0.2s; }
+#modalBtnD { background-color: #ffae00; color: #333; }
+#modalBtnN { background-color: #002041; color: #fff; }
+#modalBtnI { background-color: #058b00; color: #fff; }
+#modalBtnD:not(:disabled):hover { background-color: #f5e298; }
+#modalBtnN:not(:disabled):hover { background-color: #69829b; }
+#modalBtnI:not(:disabled):hover { background-color: #7ebe99; }
+
+/* Modal de Confirmação */
+.confirm-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 10001; }
+.confirm-modal-box { background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25); text-align: center; max-width: 400px; width: 90%; animation: fadeIn 0.2s ease-out; }
+.confirm-modal-box h4 { margin-top: 0; margin-bottom: 10px; font-size: 1.2em; color: #333; }
+.confirm-modal-box p { margin-bottom: 25px; font-size: 1em; color: #555; line-height: 1.5; }
+.confirm-modal-buttons { display: flex; justify-content: center; gap: 15px; }
+.confirm-modal-buttons button { font-size: 0.95em; padding: 10px 25px; min-width: 110px; }
+@keyframes fadeIn { from {opacity: 0; transform: translateY(-20px);} to {opacity: 1; transform: translateY(0);} }
+
+/* ========================================= */
+/* 9. MODO ESCURO (Dark Mode) */
+/* ========================================= */
+body.dark-mode { background-color: #0f172a; color: #e2e8f0; }
+.dark-mode h1, .dark-mode h2 { color: #f8fafc; }
+.dark-mode a { color: #38bdf8; }
+.dark-mode .main-title-container { border-bottom-color: #334155; }
+.dark-mode footer { border-top-color: #334155; color: #64748b; }
+.dark-mode footer .footer-rights { color: #e2e8f0; }
+
+/* Componentes */
+.dark-mode .btn-secondary { background-color: #334155; color: #e2e8f0 !important; border: 1px solid #475569; }
+.dark-mode .btn-secondary:hover { background-color: #475569; }
+.dark-mode form, .dark-mode table, .dark-mode .controles-escala, .dark-mode .inicio-ordem-wrapper { background-color: #1e293b; border-color: #334155; box-shadow: none; border: 1px solid #334155; }
+.dark-mode input, .dark-mode select, .dark-mode textarea { background-color: #0f172a; border-color: #475569; color: #e2e8f0; }
+.dark-mode .inicio-ordem-wrapper label { color: #e2e8f0; }
+.dark-mode .mes-anterior-destaque { color: #facc15; }
+.dark-mode .controles-escala p, .dark-mode .controles-escala strong { color: #f8fafc; }
+
+/* Botões Personalizados Dark Mode */
+body.dark-mode .barra-botoes .botao-azul {
+    background-color: #1d4ed8;
+}
+body.dark-mode .barra-botoes .botao-azul:hover {
+    background-color: #1e40af;
+}
+
+/* Calendário Dark */
+.dark-mode .calendar th { background-color: #334155; color: #cbd5e1; border-color: #475569; }
+.dark-mode .calendar td { background-color: #1e293b; border-color: #334155; }
+.dark-mode .calendar td:hover { background-color: #28364a; }
+.dark-mode .calendar td.weekend { background-color: #192333; }
+.dark-mode .calendar td.other-month { background-color: #0f172a; color: #475569; }
+.dark-mode .day-number { color: #94a3b8; }
+.dark-mode .btn-detalhes { color: #38bdf8; }
+.dark-mode .plantoes-do-dia { color: #cbd5e1; }
+.dark-mode .plantao-item.fixo { background-color: #334155; color: #f1f5f9; }
+.dark-mode .status-dot.red { border-color: rgba(255,255,255,0.25); }
+.dark-mode .status-dot.red::before { color: #ef4444; }
+
+/* Slots e Ícones Dark */
+.dark-mode .turno-icon.turno-N { color: #fef08a; }
+.dark-mode .turno-icon.turno-D { color: #fcd34d; }
+.dark-mode .availability-slot.lotado { background-color: #452326; color: #fca5a5; opacity: 1; }
+.dark-mode .availability-slot.disponivel { background-color: #1c3d30; color: #a7f3d0; }
+.dark-mode .availability-slot.availability-I.disponivel { background-color: #1e40af; color: #bfdbfe; }
+
+/* Modal Dark */
+.dark-mode .modal-content, .dark-mode .confirm-modal-box { background-color: #1e293b; border-color: #334155; color: #e2e8f0; }
+.dark-mode .modal-content h3, .dark-mode .confirm-modal-box h4 { color: #5dade2; border-top-color: #444; }
+.dark-mode .close-button { color: #cbd5e1; }
+.dark-mode .close-button:hover { color: #ef4444; }
+.dark-mode #modalOcupantesList li { border-bottom-color: #334155; }
+.dark-mode #modalOcupantesList .bombeiro-tipo { color: #94a3b8; }
+.dark-mode .btn-remover-plantao { color: #f15b6c; }
+.dark-mode .modal-buttons button:disabled { background-color: #334155; }
+
+/* Export Table Dark */
+.dark-mode .export-table tbody tr { background-color: #1e293b; color: #e2e8f0; }
+.dark-mode .export-table tbody tr:nth-child(odd) { background-color: #334155; }
+.dark-mode .export-table th { background-color: #0f172a; color: #cbd5e1; }
+.dark-mode .export-table th.bombeiro-nome-col { background-color: #0f172a; }
+.dark-mode .export-table td.fixo-ciclo { background-color: #1e3a8a; color: #bfdbfe; }
+.dark-mode .export-table td.turno-D { background-color: #14532d; color: #dcfce7; }
+.dark-mode .export-table td.turno-N { background-color: #374151; color: #f3f4f6; }
+.dark-mode .export-table td.turno-I { background-color: #155e75; color: #cff4fc; }
