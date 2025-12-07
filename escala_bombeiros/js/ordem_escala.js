@@ -20,7 +20,6 @@ async function postForm(url, data = {}) {
         return JSON.parse(txt);
     } catch (e) {
         console.error('Resposta não-JSON de', url, txt);
-        console.error('Corpo da resposta:', txt);
         return { success: false, message: 'Resposta não-JSON de ' + url };
     }
 }
@@ -32,7 +31,6 @@ async function postForm(url, data = {}) {
 function syncProximoGlobals(bombeiro) {
     if (bombeiro && bombeiro.id) {
         window.PROXIMO_GLOBAL_ID   = Number(bombeiro.id);
-        // No PHP você grava só o nome; mantém o mesmo padrão aqui
         window.PROXIMO_GLOBAL_NOME = bombeiro.nome_completo || '';
     } else {
         window.PROXIMO_GLOBAL_ID   = null;
@@ -52,10 +50,9 @@ async function carregarProximoDaOrdem() {
 
     card.innerHTML = 'Carregando próximo da ordem...';
     proximoBcId = null;
-    syncProximoGlobals(null); // zera globals enquanto carrega
+    syncProximoGlobals(null);
 
     if (btnPular) btnPular.disabled = true;
-    // btnReset fica sempre habilitado para você conseguir resetar
     if (btnReset) btnReset.disabled = false;
 
     try {
@@ -63,15 +60,14 @@ async function carregarProximoDaOrdem() {
         const data = await resp.json();
 
         if (!data.success || !data.bombeiro) {
-            // Exemplo: "Não há BCs ativos na ordem de escolha."
             card.innerHTML = `<span>${data.message || 'Não foi possível carregar o próximo.'}</span>`;
             if (btnPular) btnPular.disabled = true;
             syncProximoGlobals(null);
-            // btnReset continua habilitado para você clicar e resetar
             return;
         }
 
         proximoBcId = data.bombeiro.id;
+        console.log('[carregarProximoDaOrdem] proximoBcId =', proximoBcId, data.bombeiro);
 
         card.innerHTML = `
             <div class="proximo-bc-nome">
@@ -80,7 +76,6 @@ async function carregarProximoDaOrdem() {
             </div>
         `;
 
-        // 🔗 Mantém as variáveis globais em sincronia com o card
         syncProximoGlobals(data.bombeiro);
 
         if (btnPular) btnPular.disabled = false;
@@ -90,8 +85,8 @@ async function carregarProximoDaOrdem() {
         card.innerHTML = 'Erro ao carregar próximo da ordem.';
         if (btnPular) btnPular.disabled = true;
         syncProximoGlobals(null);
-        if (typeof showToast === 'function') {
-            showToast('Erro ao carregar próximo da ordem.', 'error');
+        if (typeof window.showToast === 'function') {
+            window.showToast('Erro ao carregar próximo da ordem.', 'error');
         }
     }
 }
@@ -100,7 +95,12 @@ async function carregarProximoDaOrdem() {
  * Marca o BC atual como "não participa mais da ordem" (pular até o próximo reset).
  */
 async function pularBcAtual() {
-    if (!proximoBcId) return;
+    console.log('[pularBcAtual] chamado. proximoBcId =', proximoBcId);
+
+    if (!proximoBcId) {
+        console.warn('[pularBcAtual] proximoBcId está vazio, abortando.');
+        return;
+    }
 
     const btnPular = document.getElementById('btn-pular-bc');
     if (btnPular) {
@@ -113,24 +113,26 @@ async function pularBcAtual() {
             bombeiro_id: String(proximoBcId),
         });
 
+        console.log('[pularBcAtual] resposta API skip:', data);
+
         if (!data.success) {
             const msg = data.message || 'Erro ao pular bombeiro na ordem.';
-            if (typeof showToast === 'function') showToast(msg, 'error');
+            if (typeof window.showToast === 'function') window.showToast(msg, 'error');
             else alert(msg);
             return;
         }
 
-        if (typeof showToast === 'function') {
-            showToast(data.message || 'BC removido da ordem deste ciclo.', 'success');
+        if (typeof window.showToast === 'function') {
+            window.showToast(data.message || 'BC removido da ordem deste ciclo.', 'success');
         }
 
-        // Depois de pular, recarrega o próximo da fila (já sincroniza globals)
+        // Depois de pular, recarrega o próximo da fila
         await carregarProximoDaOrdem();
 
     } catch (e) {
         console.error('Erro ao pular bombeiro da ordem:', e);
         const msg = 'Erro ao pular bombeiro da ordem.';
-        if (typeof showToast === 'function') showToast(msg, 'error');
+        if (typeof window.showToast === 'function') window.showToast(msg, 'error');
         else alert(msg);
     } finally {
         if (btnPular) {
@@ -142,8 +144,6 @@ async function pularBcAtual() {
 
 /**
  * Reseta a ordem:
- *  - ativa todos na tabela ordem_escolha
- *  - zera bc_ultimo_escolheu_id
  */
 async function resetarOrdem() {
     const btnReset = document.getElementById('btn-reset-ordem');
@@ -156,24 +156,25 @@ async function resetarOrdem() {
     try {
         const data = await postForm('api/api_ordem.php?action=reset');
 
+        console.log('[resetarOrdem] resposta API reset:', data);
+
         if (!data.success) {
             const msg = data.message || 'Erro ao resetar a ordem.';
-            if (typeof showToast === 'function') showToast(msg, 'error');
+            if (typeof window.showToast === 'function') window.showToast(msg, 'error');
             else alert(msg);
             return;
         }
 
-        // Depois de resetar, recarrega o card (vai mostrar o primeiro da ordem)
         await carregarProximoDaOrdem();
 
-        if (typeof showToast === 'function') {
-            showToast(data.message || 'Ordem reiniciada. Todos voltaram para a fila.', 'success');
+        if (typeof window.showToast === 'function') {
+            window.showToast(data.message || 'Ordem reiniciada. Todos voltaram para a fila.', 'success');
         }
 
     } catch (e) {
         console.error('Erro ao resetar a ordem:', e);
         const msg = 'Erro ao resetar a ordem.';
-        if (typeof showToast === 'function') showToast(msg, 'error');
+        if (typeof window.showToast === 'function') window.showToast(msg, 'error');
         else alert(msg);
     } finally {
         btnReset.disabled = false;
@@ -187,93 +188,97 @@ async function resetarOrdem() {
 async function salvarInicioOrdem(bombeiroId) {
     if (!bombeiroId) return;
 
-    console.log('[ordem_escala] Salvando início da ordem para BC ID:', bombeiroId);
+    console.log('[salvarInicioOrdem] BC ID:', bombeiroId);
 
     try {
         const data = await postForm('api/api_set_inicio_ordem.php', {
             bombeiro_id: String(bombeiroId),
         });
 
-        console.log('[ordem_escala] Resposta salvarInicioOrdem:', data);
+        console.log('[salvarInicioOrdem] resposta API:', data);
 
         if (!data.success) {
             const msg = data.message || 'Não foi possível salvar o início da ordem.';
-            if (typeof showToast === 'function') showToast(msg, 'error');
+            if (typeof window.showToast === 'function') window.showToast(msg, 'error');
             else alert(msg);
             return;
         }
 
-        if (typeof showToast === 'function') {
-            showToast(data.message || 'Início da ordem atualizado.', 'success');
+        if (typeof window.showToast === 'function') {
+            window.showToast(data.message || 'Início da ordem atualizado.', 'success');
         }
 
-        // Após alterar o início, recarrega o próximo (já sincroniza globals)
         await carregarProximoDaOrdem();
 
     } catch (e) {
         console.error('Erro ao salvar início da ordem:', e);
         const msg = 'Erro ao salvar início da ordem.';
-        if (typeof showToast === 'function') showToast(msg, 'error');
+        if (typeof window.showToast === 'function') window.showToast(msg, 'error');
         else alert(msg);
     }
 }
 
 // Inicializa ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('[ordem_escala] DOMContentLoaded disparado');
     carregarProximoDaOrdem();
 
     const btnPular   = document.getElementById('btn-pular-bc');
     const btnReset   = document.getElementById('btn-reset-ordem');
     const selInicio  = document.getElementById('selectInicioOrdem');
 
-    // --- CORREÇÃO DO BOTÃO PULAR ---
+    // Botão PULAR
     if (btnPular) {
         btnPular.addEventListener('click', async (e) => {
             e.preventDefault();
+            console.log('[ordem_escala] clique em btn-pular-bc, proximoBcId =', proximoBcId);
+
             const mensagem = 'Tem certeza que este BC não quer mais escolher neste ciclo?';
 
             let ok;
-            // Se showConfirm existir, usa await (Promise). Se não, fallback para confirm nativo.
-            if (typeof showConfirm === 'function') {
-                ok = await showConfirm(mensagem);
+            if (typeof window.showConfirm === 'function') {
+                ok = await window.showConfirm(mensagem);
             } else {
                 ok = confirm(mensagem);
             }
 
+            console.log('[ordem_escala] resultado confirmação pular =', ok);
+
             if (!ok) return;
 
-            pularBcAtual();
+            await pularBcAtual();
         });
     }
 
-    // --- CORREÇÃO DO BOTÃO RESET ---
+    // Botão RESET
     if (btnReset) {
         btnReset.addEventListener('click', async (e) => {
             e.preventDefault();
+            console.log('[ordem_escala] clique em btn-reset-ordem');
+
             const mensagem = 'Resetar a ordem vai colocar TODOS os BCs de volta na fila. Deseja continuar?';
 
             let ok;
-            if (typeof showConfirm === 'function') {
-                ok = await showConfirm(mensagem);
+            if (typeof window.showConfirm === 'function') {
+                ok = await window.showConfirm(mensagem);
             } else {
                 ok = confirm(mensagem);
             }
 
+            console.log('[ordem_escala] resultado confirmação reset =', ok);
+
             if (!ok) return;
 
-            resetarOrdem();
+            await resetarOrdem();
         });
     }
 
-    // Quando mudar o "Começou no mês de ... com"
+    // Select "Começou no mês de..."
     if (selInicio) {
         selInicio.addEventListener('change', (e) => {
             const val = e.target.value;
             console.log('[ordem_escala] selectInicioOrdem change, value =', val);
-
-            // Se voltar para "-- Selecione --", não salva nada
             if (!val) return;
-
             salvarInicioOrdem(val);
         });
     }

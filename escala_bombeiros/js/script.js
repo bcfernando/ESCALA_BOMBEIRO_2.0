@@ -84,6 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
       btnNo.onclick = () => closeHandler(false);
     });
   };
+  // Expor para uso em outros arquivos (ordem_escala.js)
+  window.showToast   = showToast;
+  window.showConfirm = showConfirm;
 
   // =====================================
   // Form de inativação de bombeiro

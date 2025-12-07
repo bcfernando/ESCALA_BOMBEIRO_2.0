@@ -459,7 +459,8 @@ $dias_semana             = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
     <script src="js/script.js"></script>
     <script src="js/notificacoes.js"></script>
-    <script src="js/ordem_escala.js"></script>
+    <script src="js/ordem_escala.js?v=<?= time() ?>"></script>
+    <script src="js/notificacoes.js?v=<?= time() ?>"></script>
 
 </body>
 </html>

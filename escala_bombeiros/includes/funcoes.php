@@ -216,12 +216,11 @@ function avancar_e_salvar_proximo_id(mysqli $conn): ?string {
     return $proximo_id;
 }
 
-// --- Funções Auxiliares ---
-// ... (sem alterações aqui, igual à versão anterior)
 function get_bombeiro_nome(int|string $bombeiro_id, mysqli $conn): ?string {
-    $sql = "SELECT nome_completo FROM bombeiros WHERE id = ?";
+    // Só considera bombeiro ATIVO
+    $sql = "SELECT nome_completo FROM bombeiros WHERE id = ? AND ativo = 1";
     if ($stmt = mysqli_prepare($conn, $sql)) {
-        $id_int = (int) $bombeiro_id;
+        $id_int = (int)$bombeiro_id;
         mysqli_stmt_bind_param($stmt, "i", $id_int);
         if (mysqli_stmt_execute($stmt)) {
             mysqli_stmt_bind_result($stmt, $nome);
@@ -234,6 +233,7 @@ function get_bombeiro_nome(int|string $bombeiro_id, mysqli $conn): ?string {
     }
     return null;
 }
+
 function set_flash_message(string $tipo, string $mensagem): void { if (session_status() == PHP_SESSION_NONE) { session_start(); } $_SESSION['flash_message'] = ['tipo' => $tipo, 'mensagem' => $mensagem]; }
 function display_flash_message(): void { if (isset($_SESSION['flash_message'])) { $flash = $_SESSION['flash_message']; echo '<div class="flash-message ' . htmlspecialchars($flash['tipo']) . '">' . htmlspecialchars($flash['mensagem']) . '</div>'; unset($_SESSION['flash_message']); } }
 function abreviar_nome(string $nome_completo, int $max_len = 10): string { if (mb_strlen($nome_completo) <= $max_len) { return $nome_completo; } $partes = explode(' ', $nome_completo); $primeiro_nome = $partes[0]; if (count($partes) > 1) { $ultima_inicial = mb_substr(end($partes), 0, 1) . '.'; $abreviado = $primeiro_nome . ' ' . $ultima_inicial; if (mb_strlen($abreviado) <= $max_len) { return $abreviado; } } return mb_substr($nome_completo, 0, $max_len - 2) . '..'; }

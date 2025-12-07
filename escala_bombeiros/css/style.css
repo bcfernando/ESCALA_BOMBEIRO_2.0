@@ -230,7 +230,7 @@ body.dark-mode .proximo-bc-card .nome {
 .proximo-bc-card .label {
     font-size: 0.85rem;
     margin-right: 6px;
-    color: #c0c6d4; /* Cinza claro */
+    color: #000000; 
 }
 
 .proximo-bc-card .nome {
